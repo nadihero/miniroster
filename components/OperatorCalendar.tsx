@@ -37,8 +37,31 @@ const SHIFT_BORDER: Record<string, string> = {
   C: "border-gray-600",
 };
 
+function getTodayMakassar(): string {
+  const now = new Date();
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Makassar",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(now);
+  const y = parts.find((p) => p.type === "year")?.value;
+  const m = parts.find((p) => p.type === "month")?.value;
+  const d = parts.find((p) => p.type === "day")?.value;
+  return `${y}-${m}-${d}`;
+}
+
+function formatDateId(dateStr: string): string {
+  const [y, m, d] = dateStr.split("-");
+  const months = [
+    "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+    "Juli", "Agustus", "September", "Oktober", "November", "Desember",
+  ];
+  return `${parseInt(d)} ${months[parseInt(m) - 1]} ${y}`;
+}
+
 export default function OperatorCalendar({ data }: { data: OperatorRoster }) {
-  const today = "2026-06-08";
+  const today = getTodayMakassar();
 
   const shiftMap = useMemo(() => {
     const map = new Map<string, ShiftDay>();
@@ -154,7 +177,7 @@ export default function OperatorCalendar({ data }: { data: OperatorRoster }) {
       {/* Today's Detail */}
       {shiftMap.has(today) && (
         <div className="mt-4 p-4 bg-gray-900 text-white rounded-2xl">
-          <p className="text-xs text-gray-400 mb-1">Hari Ini — 8 Juni 2026</p>
+          <p className="text-xs text-gray-400 mb-1">Hari Ini — {formatDateId(today)}</p>
           <div className="flex items-center justify-between">
             <span className="font-bold text-lg">{shiftMap.get(today)!.shift}</span>
             <span className="text-sm px-2 py-1 rounded bg-white/10">
