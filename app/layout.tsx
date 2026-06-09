@@ -18,7 +18,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="id">
-      <body className="bg-gray-50 min-h-screen">{children}</body>
+      <body className="bg-gradient-vibrant min-h-screen text-white">
+        {children}
+      </body>
     </html>
   );
 }

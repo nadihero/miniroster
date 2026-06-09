@@ -14,21 +14,38 @@ export default function Home() {
 
   if (!loaded) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-gray-400 text-sm">
-        Memuat data...
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="glass-strong rounded-2xl px-8 py-6 animate-pulse">
+          <span className="text-white/80 text-sm font-medium">Memuat data...</span>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
+      {/* Decorative floating elements */}
+      <div className="fixed top-20 left-10 w-32 h-32 bg-white/10 rounded-full blur-3xl animate-float" />
+      <div className="fixed bottom-20 right-10 w-40 h-40 bg-purple-300/20 rounded-full blur-3xl animate-float-delayed" />
+      <div className="fixed top-1/2 left-1/3 w-24 h-24 bg-pink-300/15 rounded-full blur-2xl animate-float" />
+
       {/* Header Bar */}
-      <div className="bg-white border-b border-gray-100">
-        <div className="max-w-lg mx-auto px-4 py-3 flex items-center justify-between">
-          <h1 className="font-bold text-gray-900">Roster Viewer</h1>
+      <div className="relative z-10 glass-strong border-b border-white/10">
+        <div className="max-w-lg mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <div>
+              <h1 className="font-bold text-white text-lg leading-tight">Roster Viewer</h1>
+              <p className="text-xs text-white/60">Tim Tambang</p>
+            </div>
+          </div>
           <Link
             href="/edit"
-            className="text-xs font-medium text-gray-600 hover:text-gray-900 bg-gray-100 px-3 py-1.5 rounded-lg transition-colors"
+            className="glass px-4 py-2 rounded-xl text-xs font-medium text-white/80 hover:text-white hover:bg-white/25 transition-all"
           >
             Edit Data
           </Link>
@@ -37,39 +54,44 @@ export default function Home() {
 
       {/* Selector */}
       {!showing || !selectedData ? (
-        <div className="max-w-lg mx-auto px-4 py-12">
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 text-center">
-            <div className="w-14 h-14 bg-gray-900 text-white rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        <div className="relative z-10 max-w-lg mx-auto px-4 py-12">
+          <div className="glass-strong rounded-3xl shadow-2xl shadow-black/20 p-8 text-center">
+            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-white/30 to-white/10 flex items-center justify-center shadow-lg shadow-white/10">
+              <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
             </div>
-            <h2 className="text-lg font-bold text-gray-900 mb-1">Pilih Operator</h2>
-            <p className="text-sm text-gray-500 mb-6">
+            <h2 className="text-2xl font-bold text-white mb-2 text-shadow">Pilih Operator</h2>
+            <p className="text-sm text-white/70 mb-8">
               {data.length > 0
                 ? `${data.length} operator tersedia`
                 : "Belum ada data. Klik Edit Data untuk menambah."}
             </p>
 
             {data.length > 0 && (
-              <div className="space-y-3">
-                <select
-                  value={selectedName}
-                  onChange={(e) => setSelectedName(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                >
-                  <option value="">-- Pilih nama --</option>
-                  {data.map((op) => (
-                    <option key={op.operator} value={op.operator}>
-                      {op.operator} ({op.unit})
-                    </option>
-                  ))}
-                </select>
+              <div className="space-y-4">
+                <div className="relative">
+                  <select
+                    value={selectedName}
+                    onChange={(e) => setSelectedName(e.target.value)}
+                    className="glass-input w-full px-4 py-4 rounded-xl text-white text-sm appearance-none cursor-pointer"
+                  >
+                    <option value="" className="text-gray-800">-- Pilih nama operator --</option>
+                    {data.map((op) => (
+                      <option key={op.operator} value={op.operator} className="text-gray-800">
+                        {op.operator} ({op.unit})
+                      </option>
+                    ))}
+                  </select>
+                  <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
 
                 <button
                   onClick={() => selectedName && setShowing(true)}
                   disabled={!selectedName}
-                  className="w-full py-3 bg-gray-900 text-white text-sm font-medium rounded-xl hover:bg-gray-700 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="w-full py-4 bg-white/20 hover:bg-white/30 text-white text-sm font-bold rounded-xl transition-all border border-white/30 hover:border-white/50 shadow-lg shadow-black/10 disabled:opacity-30 disabled:cursor-not-allowed"
                 >
                   Tampilkan Roster
                 </button>
@@ -79,7 +101,7 @@ export default function Home() {
             {data.length === 0 && (
               <Link
                 href="/edit"
-                className="inline-block px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-xl hover:bg-gray-700 transition-colors"
+                className="inline-block px-6 py-3 bg-white/20 hover:bg-white/30 text-white text-sm font-bold rounded-xl transition-all border border-white/30"
               >
                 + Tambah Data Roster
               </Link>
@@ -88,14 +110,14 @@ export default function Home() {
         </div>
       ) : (
         /* Roster View */
-        <div>
+        <div className="relative z-10">
           <div className="max-w-lg mx-auto px-4 pt-4">
             <button
               onClick={() => {
                 setShowing(false);
                 setSelectedName("");
               }}
-              className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-gray-900 transition-colors mb-2"
+              className="inline-flex items-center gap-2 text-xs text-white/70 hover:text-white transition-colors mb-2 glass px-3 py-2 rounded-xl"
             >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
