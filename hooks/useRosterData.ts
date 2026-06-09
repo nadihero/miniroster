@@ -11,7 +11,6 @@ export function useRosterData() {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    // Try localStorage first
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {

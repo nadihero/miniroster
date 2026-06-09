@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRosterData } from "@/hooks/useRosterData";
 import OperatorCalendar from "@/components/OperatorCalendar";
+import SifToday from "@/components/SifToday";
 
 export default function Home() {
   const { data, loaded, getByName } = useRosterData();
@@ -52,9 +53,12 @@ export default function Home() {
       {/* Main content - centered */}
       <main className="relative z-10 px-6 py-12">
         {!showing || !selectedData ? (
-          <div className="max-w-lg mx-auto text-center">
+          <div className="max-w-lg mx-auto">
+            {/* SIF Today — di paling depan */}
+            {data.length > 0 && <SifToday data={data} />}
+
             {/* Hero text */}
-            <div className="mb-16">
+            <div className="text-center mb-12">
               <h1 className="text-4xl sm:text-5xl font-medium text-slate-900 tracking-tight mb-4 leading-tight">
                 Pilih operator
               </h1>
@@ -97,12 +101,14 @@ export default function Home() {
             )}
 
             {data.length === 0 && (
-              <Link
-                href="/edit"
-                className="pill-btn pill-primary inline-block"
-              >
-                + Tambah Data Roster
-              </Link>
+              <div className="text-center">
+                <Link
+                  href="/edit"
+                  className="pill-btn pill-primary inline-block"
+                >
+                  + Tambah Data Roster
+                </Link>
+              </div>
             )}
           </div>
         ) : (
