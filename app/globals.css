@@ -6,74 +6,58 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: #f8f9fa;
+  color: #1a1a2e;
+  overflow-x: hidden;
 }
 
-.glass {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+/* Grain texture overlay */
+.grain-bg {
+  position: relative;
 }
 
-.glass-strong {
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.35);
+.grain-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.06;
+  pointer-events: none;
+  background-image: radial-gradient(#000 1px, transparent 1px);
+  background-size: 16px 16px;
 }
 
-.glass-dark {
-  background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+/* Particle clusters */
+.particle-cluster {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
 }
 
-.glass-input {
-  background: rgba(255, 255, 255, 0.1);
+/* Pill button base */
+.pill-btn {
+  @apply rounded-full font-medium transition-all duration-200;
+}
+
+.pill-primary {
+  @apply bg-slate-950 text-white hover:bg-slate-800 px-6 py-3 text-sm;
+}
+
+.pill-secondary {
+  @apply bg-white/60 text-slate-700 border border-slate-200/80 hover:bg-white hover:border-slate-300 px-5 py-2.5 text-sm;
   backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: all 0.2s ease;
 }
 
-.glass-input:focus {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.4);
-  outline: none;
+/* Glass card for roster - minimal */
+.roster-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 24px;
 }
 
-.bg-gradient-vibrant {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
-  background-size: 400% 400%;
-  animation: gradientShift 15s ease infinite;
-}
-
-@keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-.bg-gradient-dark {
-  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
-}
-
-.text-shadow {
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
-
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-}
-
-.animate-float-delayed {
-  animation: float 6s ease-in-out 3s infinite;
+/* Tracking tight for editorial feel */
+.tracking-tight {
+  letter-spacing: -0.02em;
 }
 
 /* Custom scrollbar */
@@ -82,15 +66,43 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.15);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* Shift colors - muted pastel */
+.shift-siang {
+  @apply bg-yellow-100/80 text-yellow-800 border border-yellow-200/60;
+}
+
+.shift-malam {
+  @apply bg-blue-100/80 text-blue-800 border border-blue-200/60;
+}
+
+.shift-off {
+  @apply bg-red-100/80 text-red-800 border border-red-200/60;
+}
+
+.shift-cuti {
+  @apply bg-gray-100/80 text-gray-800 border border-gray-200/60;
+}
+
+/* Today highlight */
+.today-highlight {
+  @apply ring-2 ring-slate-950 ring-offset-2 ring-offset-[#f8f9fa] scale-110;
+}
+
+/* Smooth transitions */
+* {
+  transition-property: background-color, border-color, color, opacity, transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
 }

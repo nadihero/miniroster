@@ -23,20 +23,6 @@ function getShiftCategory(shift: string): "D" | "N" | "OFF" | "C" {
   return "C";
 }
 
-const SHIFT_BG: Record<string, string> = {
-  D: "bg-yellow-300/80 text-yellow-900 shadow-yellow-300/30",
-  N: "bg-blue-400/80 text-white shadow-blue-400/30",
-  OFF: "bg-red-400/80 text-white shadow-red-400/30",
-  C: "bg-gray-400/80 text-white shadow-gray-400/30",
-};
-
-const SHIFT_BORDER: Record<string, string> = {
-  D: "border-yellow-400/50",
-  N: "border-blue-400/50",
-  OFF: "border-red-400/50",
-  C: "border-gray-400/50",
-};
-
 function getTodayMakassar(): string {
   const now = new Date();
   const parts = new Intl.DateTimeFormat("en-CA", {
@@ -95,61 +81,71 @@ export default function OperatorCalendar({ data }: { data: OperatorRoster }) {
   }, [shiftMap]);
 
   return (
-    <div className="max-w-lg mx-auto px-4 py-6">
-      {/* Header */}
-      <div className="glass-strong rounded-2xl p-5 mb-5 shadow-xl shadow-black/10">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-white/30 to-white/10 flex items-center justify-center text-white font-bold text-lg shadow-lg border border-white/20">
+    <div className="space-y-5">
+      {/* Header Card */}
+      <div className="roster-card p-6">
+        <div className="flex items-center gap-4">
+          <div className="w-14 h-14 rounded-full bg-slate-950 flex items-center justify-center text-white font-bold text-xl tracking-tight">
             {data.operator.charAt(0)}
           </div>
           <div>
-            <h1 className="text-lg font-bold text-white">{data.operator}</h1>
-            <p className="text-xs text-white/60">{data.unit} &middot; {data.period}</p>
+            <h1 className="text-2xl font-medium text-slate-900 tracking-tight">{data.operator}</h1>
+            <p className="text-sm text-slate-500 mt-0.5">{data.unit} &middot; {data.period}</p>
           </div>
         </div>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-4 gap-2 mb-5">
-        <StatBox label="Siang" value={stats.d} gradient="from-yellow-300/40 to-yellow-400/20" />
-        <StatBox label="Malam" value={stats.n} gradient="from-blue-400/40 to-blue-500/20" />
-        <StatBox label="Off" value={stats.off} gradient="from-red-400/40 to-red-500/20" />
-        <StatBox label="Cuti" value={stats.c} gradient="from-gray-400/40 to-gray-500/20" />
+      {/* Stats Row */}
+      <div className="grid grid-cols-4 gap-3">
+        <StatBox label="Siang" value={stats.d} variant="siang" />
+        <StatBox label="Malam" value={stats.n} variant="malam" />
+        <StatBox label="Off" value={stats.off} variant="off" />
+        <StatBox label="Cuti" value={stats.c} variant="cuti" />
       </div>
 
       {/* Calendar Grid */}
-      <div className="glass-strong rounded-3xl shadow-xl shadow-black/10 p-4">
+      <div className="roster-card p-6">
+        {/* Month header */}
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-lg font-medium text-slate-900 tracking-tight">Juni 2026</h2>
+          <span className="text-xs text-slate-400 font-medium">{stats.total} hari</span>
+        </div>
+
         {/* Day headers */}
-        <div className="grid grid-cols-7 gap-1.5 mb-3">
+        <div className="grid grid-cols-7 gap-2 mb-3">
           {DAYS.map((d) => (
-            <div key={d} className="text-center text-[10px] font-bold text-white/50 uppercase py-2">
+            <div key={d} className="text-center text-[10px] font-medium text-slate-400 uppercase py-2">
               {d}
             </div>
           ))}
         </div>
 
         {/* Days */}
-        <div className="grid grid-cols-7 gap-1.5">
+        <div className="grid grid-cols-7 gap-2">
           {calendarDays.map((day, idx) => {
-            if (!day.date) {
-              return <div key={idx} className="aspect-square" />;
-            }
-            const dayNum = parseInt(day.date.split("-")[2]);
+            const dayNum = parseInt(day.date!.split("-")[2]);
             const isToday = day.date === today;
             const cat = day.shift ? getShiftCategory(day.shift) : null;
-            const bgClass = cat ? `${SHIFT_BG[cat]} shadow-lg` : "bg-white/5 text-white/30";
-            const borderClass = cat ? SHIFT_BORDER[cat] : "border-transparent";
-
+            
             return (
               <div
                 key={day.date}
                 className={`
-                  aspect-square rounded-xl border flex flex-col items-center justify-center text-xs font-bold
-                  ${bgClass} ${borderClass}
-                  ${isToday ? "ring-2 ring-white ring-offset-2 ring-offset-transparent scale-110 z-10" : ""}
+                  aspect-square rounded-2xl flex flex-col items-center justify-center text-xs font-medium
+                  ${isToday 
+                    ? "today-highlight" 
+                    : ""
+                  }
+                  ${cat === "D" ? "shift-siang" : ""}
+                  ${cat === "N" ? "shift-malam" : ""}
+                  ${cat === "OFF" ? "shift-off" : ""}
+                  ${cat === "C" ? "shift-cuti" : ""}
+                  ${!cat ? "bg-slate-50 text-slate-300 border border-slate-100" : ""}
                 `}
               >
-                <span className="text-[9px] opacity-70 font-normal">{dayNum}</span>
+                <span className={`text-[9px] font-normal ${cat ? "opacity-60" : "opacity-40"}`}>
+                  {dayNum}
+                </span>
                 {day.shift ? (
                   <span className="text-[11px] font-bold">{day.shift}</span>
                 ) : (
@@ -162,23 +158,31 @@ export default function OperatorCalendar({ data }: { data: OperatorRoster }) {
       </div>
 
       {/* Legend */}
-      <div className="mt-4 glass rounded-2xl p-4 border border-white/10">
-        <h3 className="text-[10px] font-bold text-white/50 uppercase mb-3 tracking-wider">Keterangan Shift</h3>
-        <div className="grid grid-cols-2 gap-2">
-          <LegendItem label="Shift Siang (D)" className="bg-yellow-300/70 text-yellow-900" />
-          <LegendItem label="Shift Malam (N)" className="bg-blue-400/70 text-white" />
-          <LegendItem label="Off" className="bg-red-400/70 text-white" />
-          <LegendItem label="Cuti (C)" className="bg-gray-400/70 text-white" />
+      <div className="roster-card p-5">
+        <h3 className="text-[10px] font-medium text-slate-400 uppercase mb-3 tracking-wider">Keterangan</h3>
+        <div className="grid grid-cols-2 gap-3">
+          <LegendItem label="Shift Siang (D)" className="shift-siang" />
+          <LegendItem label="Shift Malam (N)" className="shift-malam" />
+          <LegendItem label="Off" className="shift-off" />
+          <LegendItem label="Cuti (C)" className="shift-cuti" />
         </div>
       </div>
 
       {/* Today's Detail */}
       {shiftMap.has(today) && (
-        <div className="mt-4 glass-dark rounded-2xl p-5 border border-white/10">
-          <p className="text-[10px] text-white/40 mb-2 uppercase tracking-wider font-bold">Hari Ini — {formatDateId(today)}</p>
+        <div className="roster-card p-6 border-slate-950/10">
           <div className="flex items-center justify-between">
-            <span className="font-bold text-2xl text-white">{shiftMap.get(today)!.shift}</span>
-            <span className="text-sm px-4 py-2 rounded-xl glass border border-white/20 font-bold">
+            <div>
+              <p className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-1">
+                Hari Ini — {formatDateId(today)}
+              </p>
+              <div className="flex items-baseline gap-2">
+                <span className="text-3xl font-medium text-slate-900 tracking-tight">
+                  {shiftMap.get(today)!.shift}
+                </span>
+              </div>
+            </div>
+            <span className="px-4 py-2 rounded-full text-sm font-medium bg-slate-950 text-white">
               {getShiftCategory(shiftMap.get(today)!.shift) === "D"
                 ? "Shift Siang"
                 : getShiftCategory(shiftMap.get(today)!.shift) === "N"
@@ -197,16 +201,23 @@ export default function OperatorCalendar({ data }: { data: OperatorRoster }) {
 function StatBox({
   label,
   value,
-  gradient,
+  variant,
 }: {
   label: string;
   value: number;
-  gradient: string;
+  variant: "siang" | "malam" | "off" | "cuti";
 }) {
+  const variants = {
+    siang: "shift-siang",
+    malam: "shift-malam",
+    off: "shift-off",
+    cuti: "shift-cuti",
+  };
+
   return (
-    <div className={`rounded-2xl p-3 text-center bg-gradient-to-br ${gradient} border border-white/20 shadow-lg shadow-black/5`}>
-      <div className="text-2xl font-bold text-white">{value}</div>
-      <div className="text-[10px] text-white/70 font-medium">{label}</div>
+    <div className={`rounded-2xl p-3 text-center ${variants[variant]}`}>
+      <div className="text-2xl font-medium text-slate-900 tracking-tight">{value}</div>
+      <div className="text-[10px] font-medium text-slate-500 mt-0.5">{label}</div>
     </div>
   );
 }
@@ -214,8 +225,8 @@ function StatBox({
 function LegendItem({ label, className }: { label: string; className: string }) {
   return (
     <div className="flex items-center gap-2">
-      <div className={`w-3.5 h-3.5 rounded-md ${className} shadow-sm`} />
-      <span className="text-[11px] text-white/70">{label}</span>
+      <div className={`w-3 h-3 rounded-full ${className}`} />
+      <span className="text-xs text-slate-600">{label}</span>
     </div>
   );
 }

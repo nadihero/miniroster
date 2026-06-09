@@ -1,50 +1,39 @@
-# Web Design Skill: Morphism Style UI/UX
+# UI/UX Design Skill: Premium Minimalist Roster Style
 
-Dokumen ini berisi panduan, prinsip, dan standar implementasi untuk mendesain website menggunakan gaya **Morphism UI** (Glassmorphism, Neumorphism, dan Claymorphism). Fokus utama adalah menciptakan visual yang modern, minimalis, estetis, namun tetap mempertahankan aksesibilitas (accessibility) dan performa yang optimal.
-
----
-
-## 1. Jenis-Jenis Morphism Style
-
-### A. Glassmorphism (Tren Utama)
-Gaya visual yang meniru efek kaca transparan atau buram (frosted glass) dengan highlight pada bayangan dan border tipis.
-*   **Karakteristik Utama:** Transparansi, *multi-layered approach*, latar belakang yang cerah/berwarna (vibrant background), dan efek *background blur*.
-*   **Kunci Keberhasilan:** Kontras yang cukup antara teks dan latar belakang agar tetap mudah dibaca.
-
-### B. Neumorphism (Soft UI)
-Gaya visual yang menggabungkan unsur skeptisisme fisik dengan minimalis modern, meniru objek yang seolah-olah menonjol atau tenggelam dari latar belakang.
-*   **Karakteristik Utama:** Mengandalkan dua bayangan (drop shadow terang dan gelap), warna elemen yang *sama* dengan warna latar belakang, dan sudut yang sangat halus (soft border radius).
-*   **Kunci Keberhasilan:** Sangat bergantung pada pencahayaan yang konsisten (biasanya top-left light source).
-
-### C. Claymorphism
-Gaya visual yang memberikan efek seperti tanah liat atau 3D tiup yang lembut, ramah, dan ramah anak/gimik modern.
-*   **Karakteristik Utama:** Warna pastel yang cerah, *inner shadow* untuk memberikan efek volume 3D, dan *outer shadow* yang besar dan halus.
+Dokumen ini berisi panduan, prinsip desain, dan standar implementasi frontend untuk membangun antarmuka **App Roster Viewer**. Fokus utama adalah mereplikasi estetika premium, bersih, dan minimalis (Apple/Google Tech-inspired), namun dioptimalkan untuk kebutuhan visualisasi jadwal kerja (roster) dan timesheet.
 
 ---
 
-## 2. Prinsip Desain & Aturan Teknis (CSS)
+## 1. Prinsip Desain Utama
 
-### 💡 Aturan Glassmorphism
-Untuk menghasilkan efek kaca yang realistis dan elegan:
-*   **Background:** Gunakan warna putih atau gelap transparan (`rgba`) dengan opasitas rendah (antara `0.05` hingga `0.25`).
-*   **Blur:** Gunakan properti `backdrop-filter: blur()`. Rentang ideal: `8px` - `20px`.
-*   **Border (Highlight):** Berikan border tipis (`1px`) semi-transparan untuk mempertegas pantulan cahaya di ujung objek.
-*   **Shadow:** Gunakan `box-shadow` yang sangat halus untuk memberikan efek melayang (depth).
+### A. Ekstrim Minimalis & Ruang Napas (Whitespace)
+*   **Layout:** Berpusat pada simetri yang kuat. Konten utama diletakkan tepat di tengah layar dengan *padding* atas dan bawah yang sangat longgar untuk memberikan kesan premium dan tidak padat.
+*   **Tipografi:** Menggunakan font sans-serif modern (seperti Inter, SF Pro, atau Geist Sans) dengan ketebalan medium/semi-bold (bukan bold yang terlalu tebal). Pengaturan jarak antar huruf (*letter-spacing/tracking*) diatur sedikit rapat (`tracking-tight` atau `-0.02em`) untuk estetika editorial.
 
-### 💡 Aturan Neumorphism
-*   **Warna Elemen & BG:** Wajib identik (misal: `#e0e0e0`).
-*   **Shadow Kombinasi:** Wajib menggunakan dua bayangan:
-    *   *Light shadow* (top-left): Putih bersinar.
-    *   *Dark shadow* (bottom-right): Abu-abu gelap/lembut.
+### B. Tekstur Latar Belakang Komposit (Micro-particle Canvas)
+*   Latar belakang tidak menggunakan warna solid putih bersih, melainkan warna *off-white/light-grey* sangat lembut yang dilapisi oleh tekstur butiran halus (*fine grain/specks*).
+*   Di area tengah-kiri belakang teks utama, terdapat aksen dekoratif berupa sebaran organik partikel atau bintik-bintik kecil berwarna kontras (biru, ungu, merah) untuk memecah kebosanan visual tanpa mengganggu keterbacaan teks.
+
+### C. Kontras Komponen Kontrol (Pill-Shaped Elements)
+*   Navigasi dan tombol menggunakan bentuk elips sempurna (*fully rounded/pill-shaped*).
+*   Elemen primer menggunakan warna hitam pekat (`#000000` atau `slate-950`) untuk menarik perhatian instan, sedangkan elemen sekunder menggunakan warna abu-abu transparan yang sangat lembut dengan border tipis.
 
 ---
 
-## 3. Snippet Kode Standar (Tailwind CSS)
+## 2. Token Desain & Implementasi Tailwind CSS
 
-Berikut adalah utility class Tailwind CSS yang direkomendasikan untuk implementasi cepat:
+Gunakan token berikut untuk menjaga konsistensi komponen pada aplikasi Roster Viewer:
 
-### Premium Glassmorphism (Light Mode)
+### A. Struktur Latar Belakang & Partikel
+Untuk mengimplementasikan efek kanvas bertekstur secara ringan menggunakan Tailwind dan CSS/SVG:
 ```html
-<div class="bg-white/20 backdrop-blur-md border border-white/30 rounded-2xl shadow-xl shadow-black/5 text-slate-800">
-  <!-- Konten -->
+<!-- Wrapper Utama dengan warna dasar off-white -->
+<div class="relative min-h-screen bg-[#f8f9fa] overflow-hidden">
+  <!-- Efek Grain/Partikel Dekoratif (Absolute Layer) -->
+  <div class="absolute inset-0 opacity-[0.08] pointer-events-none bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px]"></div>
+  
+  <!-- Kluster Partikel Warna-warni di Sisi Kiri (Abstract Design Element) -->
+  <div class="absolute left-[-10%] top-[20%] w-[500px] h-[500px] bg-gradient-to-tr from-blue-500/10 via-purple-500/10 to-red-500/5 blur-3xl rounded-full pointer-events-none"></div>
+  
+  <!-- Konten Aplikasi -->
 </div>
